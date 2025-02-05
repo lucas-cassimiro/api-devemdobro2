@@ -9,7 +9,7 @@ datasource db {
 
 model Category {
   id       Int       @id @default(autoincrement())
-  name     String    @db.VarChar(50)
+  name     String
   products Product[]
 
   @@map("categories")
@@ -17,7 +17,7 @@ model Category {
 
 model Color {
   id       Int       @id @default(autoincrement())
-  name     String    @db.VarChar(50)
+  name     String
   products Product[]
 
   @@map("colors")
@@ -25,46 +25,45 @@ model Color {
 
 model Product {
   id          Int      @id @default(autoincrement())
-  name        String   @db.VarChar(100)
-  price       Decimal  @db.Decimal(10, 2)
+  name        String
+  price       Decimal
   image       String
-  discount    Decimal? @db.Decimal(5, 2)
-  rating      Decimal? @db.Decimal(3, 2)
+  discount    Decimal?
+  rating      Decimal?
   description String
-  created_at  DateTime @db.Timestamp(6)
-  updated_at  DateTime @db.Timestamp(6)
-  color_id    Int
-  category_id Int
-  size_id     Int
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  colorId     Int      @map("color_id")
+  categoryId  Int      @map("category_id")
+  sizeId      Int      @map("size_id")
   highlight   Boolean
-  ean         String   @db.VarChar(13)
-  categories  Category @relation(fields: [category_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_categories")
-  colors      Color    @relation(fields: [color_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_colors")
-  sizes       Size     @relation(fields: [size_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_sizes")
+  ean         String   @unique
+  categories  Category @relation(fields: [categoryId], references: [id], map: "fk_categories")
+  colors      Color    @relation(fields: [colorId], references: [id], map: "fk_colors")
+  sizes       Size     @relation(fields: [sizeId], references: [id], map: "fk_sizes")
   stocks      Stock[]
 
-  @@unique(fields: [ean])
   @@map("products")
 }
 
 model Size {
   id       Int       @id @default(autoincrement())
-  name     String    @db.VarChar(50)
+  name     String
   products Product[]
 
   @@map("sizes")
 }
 
 model Stock {
-  id             Int      @id @default(autoincrement())
-  product_id     Int
-  status         String   @db.VarChar(100)
-  purchase_price Decimal  @db.Decimal(10, 2)
-  expiry_date    DateTime @db.Date
-  created_at     DateTime @db.Timestamp(6)
-  updated_at     DateTime @db.Timestamp(6)
-  quantity       Int
-  products       Product  @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_products")
+  id            Int      @id @default(autoincrement())
+  productId     Int      @map("product_id")
+  status        String
+  purchasePrice Decimal  @map("purchase_price")
+  expiryPate    DateTime @map("expiry_date")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+  quantity      Int
+  products      Product  @relation(fields: [productId], references: [id], map: "fk_products")
 
   @@map("stocks")
 }
