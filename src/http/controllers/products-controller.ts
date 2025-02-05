@@ -10,7 +10,7 @@ export class ProductsController {
   }
 
   async create(request: Request, response: Response) {
-      const { name, price, discount, description, color_id, updated_at, category_id, size_id, highlight, ean  } = request.body
+      const { name, price, discount, description, color_id,category_id, size_id, highlight, ean  } = request.body
       const image = request.file.filename!
 
     try {
@@ -29,8 +29,6 @@ export class ProductsController {
                 price,
                 discount,
                 description,
-                created_at: new Date(),
-                updated_at: new Date(updated_at),
                 color_id,
                 category_id,
                 size_id,
