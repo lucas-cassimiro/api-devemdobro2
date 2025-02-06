@@ -1,9 +1,9 @@
 version: '3.8'
 
 services:
-  devemdobro-postgres:
+  devemdobro:
     image: postgres:15
-    container_name: devemdobro-postgres2
+    container_name: devemdobro
     restart: always
     environment:
       POSTGRES_USER: postgres
